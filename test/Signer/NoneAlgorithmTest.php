@@ -1,8 +1,9 @@
 <?php
 
 use ItsDangerous\Signer\NoneAlgorithm;
+use PHPUnit\Framework\TestCase;
 
-class NoneAlgorithmTest extends PHPUnit_Framework_TestCase
+class NoneAlgorithmTest extends TestCase
 {
 
     public function testGetSignature_shouldReturnEmptySignature()

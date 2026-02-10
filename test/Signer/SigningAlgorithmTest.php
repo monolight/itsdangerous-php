@@ -1,13 +1,19 @@
 <?php
 
 use ItsDangerous\Signer\SigningAlgorithm;
+use PHPUnit\Framework\TestCase;
 
-class SigningAlgorithmTest extends PHPUnit_Framework_TestCase
+class SigningAlgorithmTest extends TestCase
 {
 
 	public function testConstantTimeCompare_unequalLengths_returnFalse()
 	{
-		$stub = $this->getMockForAbstractClass('ItsDangerous\Signer\SigningAlgorithm');
+		$stub = new class extends SigningAlgorithm {
+			public function get_signature($key, $value): string
+			{
+				return '';
+			}
+		};
 
 		$equal = $stub->constant_time_compare('four', 'sixsix');
 

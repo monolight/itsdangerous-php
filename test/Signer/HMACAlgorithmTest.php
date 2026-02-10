@@ -1,8 +1,9 @@
 <?php
 
 use ItsDangerous\Signer\HMACAlgorithm;
+use PHPUnit\Framework\TestCase;
 
-class HMACAlgorithmTest extends PHPUnit_Framework_TestCase
+class HMACAlgorithmTest extends TestCase
 {
 
     public function testGetSignature_noDigestProvided_shouldDefaultToSHA1()

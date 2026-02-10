@@ -1,9 +1,11 @@
 <?php
 
+use ItsDangerous\BadData\SignatureExpired;
 use ItsDangerous\Support\ClockProvider;
 use ItsDangerous\Signer\TimedSerializer;
+use PHPUnit\Framework\TestCase;
 
-class TimedSerializerTest extends PHPUnit_Framework_TestCase
+class TimedSerializerTest extends TestCase
 {
     private $nowString, $now;
     private $complex = array(
@@ -18,14 +20,14 @@ class TimedSerializerTest extends PHPUnit_Framework_TestCase
                           '.CXOj7w' . // timestamp
                           '.csPnVJixr4Z3sRRuDzHBz7l8mKo'; //signature
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->nowString = '2016-01-10 08:12:31';
         $this->now = new DateTime($this->nowString);
         ClockProvider::setTestNow($this->now);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         ClockProvider::setTestNow();
     }
@@ -56,7 +58,7 @@ class TimedSerializerTest extends PHPUnit_Framework_TestCase
 
     public function testLoads_expiredPayload_ShouldComplain()
     {
-        $this->setExpectedException('ItsDangerous\BadData\SignatureExpired');
+        $this->expectException(SignatureExpired::class);
 
         $nowString = '2016-01-10 08:13:31';
         ClockProvider::setTestNow(new DateTime($nowString));
@@ -125,7 +127,7 @@ class TimedSerializerTest extends PHPUnit_Framework_TestCase
         fwrite($fp, $this->signedJSON);
         rewind($fp);
 
-        $this->setExpectedException('ItsDangerous\BadData\SignatureExpired');
+        $this->expectException(SignatureExpired::class);
 
         $nowString = '2016-01-10 08:13:31';
         ClockProvider::setTestNow(new DateTime($nowString));

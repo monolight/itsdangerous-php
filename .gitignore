@@ -4,3 +4,4 @@
 composer.lock
 vendor/
 server/public/test/coverage/
+.phpunit.result.cache
