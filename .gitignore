@@ -6,3 +6,4 @@ vendor/
 server/public/test/coverage/
 .phpunit.result.cache
 .phpunit.cache/
+phpstan.log

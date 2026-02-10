@@ -19,9 +19,7 @@ all: clean install
 .PHONY: all
 
 php-stan:
-	clear
-	-$(PHP) vendor/bin/phpstan analyse > phpstan.log
-	$(PHP) vendor/bin/phpstan analyse
+	$(PHP) vendor/bin/phpstan analyse 2>&1 | tee phpstan.log
 .PHONY: php-stan
 
 php-stan-ci:

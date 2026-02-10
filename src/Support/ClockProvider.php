@@ -36,6 +36,6 @@ class ClockProvider
 
     public static function timestampToDate($ts)
     {
-        return \DateTime::createFromFormat("U", $ts + self::$EPOCH, new \DateTimeZone("UTC"));
+        return \DateTime::createFromFormat("U", (string) ($ts + self::$EPOCH), new \DateTimeZone("UTC"));
     }
 }
