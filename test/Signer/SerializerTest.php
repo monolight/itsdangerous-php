@@ -1,9 +1,11 @@
 <?php
 
-use ItsDangerous\Signer\Serializer;
+use ItsDangerous\BadData\BadPayload;
 use ItsDangerous\BadData\BadSignature;
+use ItsDangerous\Signer\Serializer;
+use PHPUnit\Framework\TestCase;
 
-class SerializerTest extends PHPUnit_Framework_TestCase
+class SerializerTest extends TestCase
 {
     private $complex = array(
         "foo",
@@ -26,7 +28,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
 
     public function testSerializer_jsonLoadsWithDifferentSecret_shouldThrow()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadSignature');
+        $this->expectException(BadSignature::class);
 
         $ser = new Serializer("whatevs");
         $cp = $ser->loads($this->signedJSON);
@@ -34,7 +36,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
 
     public function testSerializer_jsonLoadsTamperedData_shouldFail()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadSignature');
+        $this->expectException(BadSignature::class);
 
         $ser = new Serializer("asecret");
         $cp = $ser->loads($this->tamperedJSON);
@@ -103,7 +105,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
 
     public function testSerializer_serializerThrowsAtLoads_shouldFail()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadPayload');
+        $this->expectException(BadPayload::class);
         $angry = new angrySerializer();
 
         $ser = new Serializer("asecret", 'itsdangerous', $angry);

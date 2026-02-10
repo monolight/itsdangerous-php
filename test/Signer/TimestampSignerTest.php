@@ -1,11 +1,15 @@
 <?php
 
+use ItsDangerous\BadData\BadSignature;
+use ItsDangerous\BadData\BadTimeSignature;
+use ItsDangerous\BadData\SignatureExpired;
 use ItsDangerous\Support\ClockProvider;
 use ItsDangerous\Signer\TimestampSigner;
+use PHPUnit\Framework\TestCase;
 
-class TimestampSignerTest extends PHPUnit_Framework_TestCase
+class TimestampSignerTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown(): void
     {
         ClockProvider::setTestNow();
     }
@@ -68,7 +72,7 @@ class TimestampSignerTest extends PHPUnit_Framework_TestCase
 
     public function testTimestampSigner_unsignTamperedData_shouldFail()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadTimeSignature');
+        $this->expectException(BadTimeSignature::class);
 
         $nowString = '2016-01-10 08:12:31';
         ClockProvider::setTestNow(new DateTime($nowString));
@@ -79,7 +83,7 @@ class TimestampSignerTest extends PHPUnit_Framework_TestCase
 
     public function testTimestampSigner_unsignMissingTimestamp_shouldFail()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadTimeSignature');
+        $this->expectException(BadTimeSignature::class);
 
         $nowString = '2016-01-10 08:12:31';
         ClockProvider::setTestNow(new DateTime($nowString));
@@ -90,7 +94,7 @@ class TimestampSignerTest extends PHPUnit_Framework_TestCase
 
     public function testTimestampSigner_unsignTimestampTampered_shouldFail()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadSignature');
+        $this->expectException(BadSignature::class);
 
         $nowString = '2016-01-10 08:12:31';
         ClockProvider::setTestNow(new DateTime($nowString));
@@ -101,7 +105,7 @@ class TimestampSignerTest extends PHPUnit_Framework_TestCase
 
     public function testUnsign_expiredSignature_ShouldComplain()
     {
-        $this->setExpectedException('ItsDangerous\BadData\SignatureExpired');
+        $this->expectException(SignatureExpired::class);
 
         $nowString = '2016-01-10 08:13:31';
         ClockProvider::setTestNow(new DateTime($nowString));

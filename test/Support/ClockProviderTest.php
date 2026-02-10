@@ -1,8 +1,9 @@
 <?php
 
 use ItsDangerous\Support\ClockProvider;
+use PHPUnit\Framework\TestCase;
 
-class ClockProviderTest extends PHPUnit_Framework_TestCase
+class ClockProviderTest extends TestCase
 {
     public function testGetTimestamp_default_shouldGetNow()
     {

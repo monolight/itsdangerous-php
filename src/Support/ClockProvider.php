@@ -29,13 +29,13 @@ class ClockProvider
         return $dtnow - self::$EPOCH;
     }
 
-    public static function setTestNow(DateTime $dt = null)
+    public static function setTestNow(?DateTime $dt = null)
     {
         static::$now = $dt;
     }
 
     public static function timestampToDate($ts)
     {
-        return \DateTime::createFromFormat("U", $ts + self::$EPOCH, new \DateTimeZone("UTC"));
+        return \DateTime::createFromFormat("U", (string) ($ts + self::$EPOCH), new \DateTimeZone("UTC"));
     }
 }

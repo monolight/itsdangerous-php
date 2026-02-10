@@ -1,13 +1,14 @@
-<phpunit bootstrap="itsdangerous.php" colors="true">
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache">
     <testsuites>
         <testsuite name="All">
-            <directory>test/</directory>
+            <directory>test</directory>
         </testsuite>
     </testsuites>
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-		<directory suffix=".php">src</directory>
-		<file>itsdangerous.php</file>
-		</whitelist>
-	</filter>
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
 </phpunit>

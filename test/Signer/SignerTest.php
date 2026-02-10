@@ -1,8 +1,10 @@
 <?php
 
+use ItsDangerous\BadData\BadSignature;
 use ItsDangerous\Signer\Signer;
+use PHPUnit\Framework\TestCase;
 
-class SignerTest extends PHPUnit_Framework_TestCase
+class SignerTest extends TestCase
 {
 
     public function testSigner_signAndUnsign_shouldBeCongruent()
@@ -17,7 +19,7 @@ class SignerTest extends PHPUnit_Framework_TestCase
 
     public function testSigner_unsignTamperedData_shouldChoke()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadSignature');
+        $this->expectException(BadSignature::class);
 
         $s = new Signer("secret");
         $bar = $s->unsign('hallo.7KTthSs1fJgtbigPvFpQH1bpoGA');
@@ -25,7 +27,7 @@ class SignerTest extends PHPUnit_Framework_TestCase
 
     public function testSigner_unsignMalformedData_shouldChoke()
     {
-        $this->setExpectedException('ItsDangerous\BadData\BadSignature');
+        $this->expectException(BadSignature::class);
 
         $s = new Signer("secret");
         $bar = $s->unsign('hallo7KTthSs1fJgtbigPvFpQH1bpoGA');
@@ -53,7 +55,7 @@ class SignerTest extends PHPUnit_Framework_TestCase
 
     public function testSigner_deriveKeyByGarbage_shouldChoke()
     {
-        $this->setExpectedException('Exception');
+        $this->expectException(\Exception::class);
         $s = new Signer("secret", 'salty', '.', 'garbage');
         $foo = $s->sign("hello");
     }
