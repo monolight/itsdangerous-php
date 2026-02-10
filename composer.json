@@ -1,6 +1,7 @@
 {
     "name": "ml/itsdangerous",
     "description": "A PHP port of itsdangerous by @mitsuhiko - Various helpers to pass data to untrusted environments and to get it back safe and sound.",
+    "license": "BSD-3-Clause",
     "require": {
         "php": "^8.4"
     },
@@ -11,6 +12,11 @@
     "autoload": {
         "psr-4": {
             "ItsDangerous\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "2.0.x-dev"
         }
     }
 }
