@@ -18,12 +18,14 @@ class TimestampSigner extends Signer {
         return ClockProvider::timestampToDate($ts);
     }
 
+    #[\Override]
     public function sign($value) {
         $timestamp = $this->base64_encode_($this->int_to_bytes($this->get_timestamp()));
         $value = $value . $this->sep . $timestamp;
         return $value . $this->sep . $this->get_signature($value);
     }
 
+    #[\Override]
     public function unsign($value, $max_age=null, $return_timestamp=false) {
 
         try {
@@ -34,14 +36,14 @@ class TimestampSigner extends Signer {
             $result = $ex->payload;
         }
 
-        if(strpos($result, $this->sep) === false) {
+        if(!str_contains((string) $result, (string) $this->sep)) {
             if (!is_null($sig_err)) {
                 throw $sig_err;
             }
             throw new BadTimeSignature("timestamp missing", $result);
         }
 
-        list($timestamp, $value) = $this->pop_signature($result);
+        [$timestamp, $value] = $this->pop_signature($result);
 
         $timestamp = $this->bytes_to_int($this->base64_decode_($timestamp));
 
@@ -62,16 +64,17 @@ class TimestampSigner extends Signer {
         }
 
         if($return_timestamp) {
-            return array($value, $this->timestamp_to_datetime($timestamp));
+            return [$value, $this->timestamp_to_datetime($timestamp)];
         }
         return $value;
     }
 
+    #[\Override]
     public function validate($signed_value, $max_age=null) {
         try {
             $this->unsign($signed_value, $max_age);
             return true;
-        } catch(\Exception $ex) {
+        } catch(\Exception) {
             return false;
         }
     }

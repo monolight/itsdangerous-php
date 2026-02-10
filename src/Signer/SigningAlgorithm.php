@@ -11,8 +11,8 @@ abstract class SigningAlgorithm {
 
     public function constant_time_compare($val1, $val2)
     {
-        $s = strlen($val1);
-        if($s != strlen($val2)){
+        $s = strlen((string) $val1);
+        if($s != strlen((string) $val2)){
             return false;
         }
         $result = 0;

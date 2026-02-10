@@ -16,6 +16,6 @@ class HMACAlgorithm extends SigningAlgorithm {
     }
 
     public function get_signature($key, $value) {
-        return hash_hmac($this->digest_method, $value, $key, true);
+        return hash_hmac((string) $this->digest_method, (string) $value, (string) $key, true);
     }
 }

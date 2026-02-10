@@ -26,20 +26,16 @@ class Signer {
     }
 
     protected function digest($input) {
-        return hash($this->digest_method, $input, true);
+        return hash((string) $this->digest_method, (string) $input, true);
     }
 
     public function derive_key() {
-        switch ($this->key_derivation) {
-            case 'concat':
-                return $this->digest($this->salt . $this->secret_key);
-            case 'django-concat':
-                return $this->digest($this->salt . 'signer' . $this->secret_key);
-            case 'hmac':
-                return hash_hmac($this->digest_method, $this->salt, $this->secret_key, true);
-            default:
-                throw new \Exception("Unknown key derivation method");
-        }
+        return match ($this->key_derivation) {
+            'concat' => $this->digest($this->salt . $this->secret_key),
+            'django-concat' => $this->digest($this->salt . 'signer' . $this->secret_key),
+            'hmac' => hash_hmac((string) $this->digest_method, (string) $this->salt, (string) $this->secret_key, true),
+            default => throw new \Exception("Unknown key derivation method"),
+        };
     }
 
     public function get_signature($value) {
@@ -59,10 +55,10 @@ class Signer {
     }
 
     public function unsign($signed_value) {
-        if(strpos($signed_value, $this->sep) === false) {
+        if(!str_contains((string) $signed_value, (string) $this->sep)) {
             throw new BadSignature("No \"{$this->sep}\" found in value");
         }
-        list($sig, $value) = $this->pop_signature($signed_value);
+        [$sig, $value] = $this->pop_signature($signed_value);
         if($this->verify_signature($value, $sig)) {
             return $value;
         }
@@ -73,25 +69,25 @@ class Signer {
         try {
             $this->unsign($signed_value);
             return true;
-        } catch(BadSignature $ex) {
+        } catch(BadSignature) {
             return false;
         }
     }
 
     protected function pop_signature($signed_value)
     {
-        $exploded = explode($this->sep, $signed_value);
+        $exploded = explode($this->sep, (string) $signed_value);
         $sig = array_pop($exploded);
         $value = implode($this->sep, $exploded);
-        return array($sig, $value);
+        return [$sig, $value];
     }
 
     public function base64_encode_($data) {
-        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+        return rtrim(strtr(base64_encode((string) $data), '+/', '-_'), '=');
     }
 
     public function base64_decode_($data) {
-        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen((string) $data) % 4, '=', STR_PAD_RIGHT));
     }
 
 

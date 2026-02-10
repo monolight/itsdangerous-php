@@ -29,7 +29,7 @@ class ClockProvider
         return $dtnow - self::$EPOCH;
     }
 
-    public static function setTestNow(DateTime $dt = null)
+    public static function setTestNow(?DateTime $dt = null)
     {
         static::$now = $dt;
     }

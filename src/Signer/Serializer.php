@@ -6,7 +6,7 @@ use ItsDangerous\BadData\BadPayload;
 
 class Serializer {
 
-    public $default_signer = 'ItsDangerous\Signer\Signer';
+    public $default_signer = \ItsDangerous\Signer\Signer::class;
     public static function default_serializer() {return new SimpleJsonSerializer();}
 
     protected $secret_key;
@@ -54,7 +54,7 @@ class Serializer {
     }
 
     public function dump($obj, $f, $salt=null) {
-        fwrite($f, $this->dumps($obj, $salt));
+        fwrite($f, (string) $this->dumps($obj, $salt));
     }
 
     public function loads($s, $salt=null) {
@@ -68,15 +68,15 @@ class Serializer {
 
     public function loads_unsafe($s, $salt=null) {
         try {
-            return array(true, $this->loads($s, $salt));
+            return [true, $this->loads($s, $salt)];
         } catch (\Exception $ex) {
             if (empty($ex->payload)) {
-                return array(false, null);
+                return [false, null];
             }
             try {
-                return array(false, $this->load_payload($ex->payload));
-            } catch (BadPayload $ex) {
-                return array(false, null);
+                return [false, $this->load_payload($ex->payload)];
+            } catch (BadPayload) {
+                return [false, null];
             }
         }
     }
