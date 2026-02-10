@@ -12,6 +12,7 @@ class Serializer {
     protected $secret_key;
     protected $salt;
     protected $serializer;
+    protected $signer;
 
     public function __construct($secret_key, $salt="itsdangerous", $serializer=null, $signer=null) {
         $this->secret_key = $secret_key;
