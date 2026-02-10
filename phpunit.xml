@@ -4,10 +4,9 @@
             <directory>test/</directory>
         </testsuite>
     </testsuites>
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-		<directory suffix=".php">src</directory>
-		<file>itsdangerous.php</file>
-		</whitelist>
-	</filter>
+	<source>
+		<include>
+			<directory suffix=".php">src</directory>
+		</include>
+	</source>
 </phpunit>
